@@ -102,7 +102,6 @@ define jdk_oracle::install(
         creates => "${install_dir}/${installerFilename}",
         command => "wget -c --no-cookies --no-check-certificate --header \"Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com\" --header \"Cookie: oraclelicense=accept-securebackup-cookie\" \"${javaDownloadURI}\" -O ${installerFilename}",
         timeout => 600,
-        require => Package['wget'],
       }
 
       file { "${install_dir}/${installerFilename}":
@@ -110,11 +109,6 @@ define jdk_oracle::install(
         require => Exec["get_jdk_installer_${version}"],
       }
 
-      if ! defined(Package['wget']) {
-        package { 'wget':
-          ensure =>  present,
-        }
-      }
     }
 
     # Java 7/8 comes in a tarball so just extract it.
@@ -273,7 +267,6 @@ define jdk_oracle::install(
           creates => "${install_dir}/${jceFilename}",
           command => "wget -c --no-cookies --no-check-certificate --header \"Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com\" --header \"Cookie: oraclelicense=accept-securebackup-cookie\" \"${jceDownloadURI}\" -O ${jceFilename}",
           timeout => 600,
-          require => Package['wget'],
         }
 
         file { "${install_dir}/${jceFilename}":
@@ -287,7 +280,7 @@ define jdk_oracle::install(
         cwd     => "${install_dir}/",
         command => "unzip ${jceFilename}",
         creates => "${install_dir}/${jce_dir}",
-        require => [ Exec['get_jce_package'], Package['unzip'] ],
+        require => Exec['get_jce_package'],
       }
 
       file { "${java_home}/jre/lib/security/README.txt":

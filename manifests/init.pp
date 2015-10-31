@@ -68,16 +68,4 @@ class jdk_oracle (
     default_java   => $default_java,
   }
 
-  if ! defined(Package['wget']) {
-    package { 'wget':
-      ensure =>  present,
-    }
-  }
-
-  if ! defined(Package['unzip']) {
-    package { 'unzip':
-      ensure =>  present,
-    }
-  }
-
 }
